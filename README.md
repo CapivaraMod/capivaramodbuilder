@@ -1,3 +1,3 @@
-# extforge
+# CapivaraMod Builder
 
-this project will no longer be maintained cause i dont have the willpower to do so and theres cooler stuff (penguinmod) to do
+wadwadawdwdawaddwa baseada no ExtForge
