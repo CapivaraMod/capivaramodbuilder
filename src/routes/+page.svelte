@@ -18,6 +18,7 @@
 
   import BlocklyComponent from "$lib/svelte-blockly";
   import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
 
   import Compiler from "../resources/compiler";
 
@@ -75,12 +76,28 @@
     dark: false,
   };
 
+  let loading = true;
+
   function updateTheme() {
     if (localConfig.dark) {
       document.body.classList.add('dark')
     } else {
       document.body.classList.remove('dark')
     }
+  }
+
+  function saveLocalConfig() {
+    try {
+      localStorage.setItem('localConfig', JSON.stringify(localConfig))
+    } catch (e) {
+      console.warn('Could not save the local configuration:', e)
+    }
+  }
+
+  function toggleDarkMode() {
+    localConfig.dark = !localConfig.dark
+    updateTheme()
+    saveLocalConfig()
   }
 
   Patches.Blockly.ToolboxFlyout(Blockly, config);
@@ -112,7 +129,7 @@
 
   function downloadProject() {
     let filteredProjectName = properties.id.replace(/[^a-z0-9\-]+/gim, "_");
-    let fileName = filteredProjectName + ".exf";
+    let fileName = filteredProjectName + ".capib";
 
     let projectData = Blockly.serialization.workspaces.save(workspace);
 
@@ -142,11 +159,13 @@
   }
 
   function loadProject() {
-    fileDialog({ accept: ".exf" }).then((files) => {
+    fileDialog({ accept: ".capib,.exf" }).then((files) => {
       if (!files) return;
       const file = files[0];
 
-      const projectNameIdx = file.name.lastIndexOf(".exf");
+      const projectNameIdx = file.name.lastIndexOf(
+        file.name.endsWith(".capib") ? ".capib" : ".exf"
+      );
 
       JSZip.loadAsync(file.arrayBuffer()).then(async (zip) => {
         const dataFolder = zip.folder("data");
@@ -196,15 +215,24 @@
       } catch {}
     })
 
-    let newconfig = localStorage.getItem('localConfig')
-    if (newconfig) {
-      localConfig.dark = JSON.parse(newconfig).dark ?? false
-      updateTheme()
+    try {
+      let newconfig = localStorage.getItem('localConfig')
+      if (newconfig) {
+        localConfig.dark = JSON.parse(newconfig).dark ?? false
+        updateTheme()
+      }
+    } catch (e) {
+      console.warn('Could not load the local configuration:', e)
     }
 
     addEventListener('unload', event => {
-      localStorage.setItem('localConfig', JSON.stringify(localConfig))
+      saveLocalConfig()
     })
+
+    // mantém a tela de loading visível por um tempo mínimo, mesmo se tudo carregar rápido
+    setTimeout(() => {
+      loading = false;
+    }, 2500);
   });
 </script>
 
@@ -212,11 +240,15 @@
   <title>CapivaraMod Builder</title>
 </head>
 
+{#if loading}
+  <div class="loading-screen" out:fade={{ duration: 400 }}>
+    <div class="spinner"></div>
+    <p>loading...</p>
+  </div>
+{/if}
+
 <NavigationBar>
-  <NavigationButton icon={NavIconDark} on:click={() => {
-    localConfig.dark = !localConfig.dark;
-    updateTheme()
-  }}></NavigationButton>
+  <NavigationButton icon={NavIconDark} on:click={toggleDarkMode}></NavigationButton>
   <NavigationDivider />
   <NavigationButton icon={NavIconSave} on:click={downloadProject}>
     Save
@@ -258,6 +290,39 @@
 <EditBlockModal />
 
 <style>
+  .loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    background: #1e1e1e;
+    color: #fff;
+  }
+
+  .loading-screen .spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #258612;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .loading-screen p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   #main {
     padding-top: 3rem;
     height: calc(100% - 3rem);
