@@ -5,7 +5,7 @@
 
 <script>
     import { createEventDispatcher } from "svelte";
-    import Blockly from "blockly/core.js";
+    import Blockly from "blockly/core";
     import registerDynamicCategories from "../../resources/categories";
     export let config = {};
     export let locale;
@@ -23,11 +23,19 @@
             Blockly.setLocale(msg);
             workspace = Blockly.inject(root, {
                 ...config,
-                toolbox:
-                    config.toolbox ? '<xml><category name="Loading..." colour="100"></category></xml>' : null,
+                toolbox: config.toolbox
+                    ? '<xml><category name="Loading..." colour="100"></category></xml>'
+                    : null,
                 rtl,
             });
-            registerDynamicCategories(workspace);
+            try {
+                // em updates (mudança de config/locale) o workspace é
+                // recriado e esta função pode tentar registrar categorias
+                // que já existem no registry global do Blockly
+                registerDynamicCategories(workspace);
+            } catch (ex) {
+                console.warn(ex);
+            }
             if (config.toolbox) workspace.updateToolbox(config.toolbox);
             workspace.refreshToolboxSelection();
             if (dom !== null) {
@@ -211,7 +219,8 @@
         stroke: none;
     }
 
-    :global(.dark .blocklySvg), :global(.dark .blocklyMutatorBackground) {
+    :global(.dark .blocklySvg),
+    :global(.dark .blocklyMutatorBackground) {
         background: #111;
         fill: #111;
     }
@@ -233,7 +242,8 @@
         fill: #000b !important;
     }
 
-    :global(.blocklyDropdownText), :global(.blocklyEditableText > image) {
+    :global(.blocklyDropdownText),
+    :global(.blocklyEditableText > image) {
         filter: invert(1);
         opacity: 0.9;
         font-weight: 400 !important;
