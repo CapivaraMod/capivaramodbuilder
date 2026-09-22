@@ -13,7 +13,7 @@ class CustomConstantProvider extends Blockly.zelos.ConstantProvider {
         super.init()
 
         this.FIELD_TEXT_FONTSIZE = 11
-        this.FIELD_TEXT_FONTFAMILY = "Noto Sans"
+        this.FIELD_TEXT_FONTFAMILY = "Noto Sans, sans-serif"
 
         this.ADD_START_HATS = true
         

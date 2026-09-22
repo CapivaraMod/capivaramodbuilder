@@ -8,6 +8,9 @@
         color: "#0fbd8c"
     }
 
+    let showIdWarning = false;
+    let warningTimeout;
+
     function update() {
         dispatch("update")
     }
@@ -18,6 +21,32 @@
         properties.name = properties.name.replace("\n", " ")
         update()
     }
+
+    function handleIdInput(e) {
+        const original = e.target.value;
+        if (/\s/.test(original)) {
+            const cleaned = original.replace(/\s/g, "");
+            properties.id = cleaned;
+            triggerIdWarning();
+        } else {
+            properties.id = original;
+        }
+    }
+
+    function handleIdKeydown(e) {
+        if (e.key === " ") {
+            e.preventDefault();
+            triggerIdWarning();
+        }
+    }
+
+    function triggerIdWarning() {
+        showIdWarning = true;
+        clearTimeout(warningTimeout);
+        warningTimeout = setTimeout(() => {
+            showIdWarning = false;
+        }, 2000);
+    }
 </script>
 
 <div class="root vert">
@@ -27,7 +56,20 @@
             <span class="name" contenteditable="plaintext-only" bind:innerText={properties.name} on:blur={validateName}></span>
         </div>
         <div class="vert equal">
-            <span>ID: <input type="text" placeholder="extensionID" maxlength="20" bind:value={properties.id} on:blur={update}></span>
+            <span class="id-field">
+                ID: <input
+                    type="text"
+                    placeholder="extensionID"
+                    maxlength="20"
+                    value={properties.id}
+                    on:input={handleIdInput}
+                    on:keydown={handleIdKeydown}
+                    on:blur={update}
+                >
+                {#if showIdWarning}
+                    <div class="toast">Spaces are not allowed in the ID</div>
+                {/if}
+            </span>
             <span>Color: <input type="color" bind:value={properties.color} on:blur={update}></span>
         </div>
     </div>
@@ -99,5 +141,20 @@
     }
     span {
         margin-top: 0.5rem;
+    }
+
+    .id-field {
+        position: relative;
+    }
+
+    .toast {
+        animation: fadeInOut 2s ease forwards;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; transform: translateX(0) translateY(5px); }
+        10% { opacity: 1; transform: translateX(0) translateY(0); }
+        85% { opacity: 1; }
+        100% { opacity: 0; }
     }
 </style>

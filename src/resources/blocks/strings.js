@@ -313,6 +313,129 @@ function register() {
         const code = `(${Y}).replaceAll(${X}, ${Z})`;
         return [`${code}`, 0];
     })
+        registerBlock(`${categoryPrefix}json_parse`, {
+        message0: 'parse JSON %1',
+        args0: [
+            {
+                "type": "field_input",
+                "name": "TEXT",
+                "check": "String",
+                "text": '{"a": 1}',
+                "acceptsBlocks": true
+            }
+        ],
+        output: null,
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const TEXT = javascriptGenerator.valueToCode(block, 'TEXT');
+        const code = `JSON.parse(${TEXT})`;
+        return [`${code}`, 0];
+    })
+
+    registerBlock(`${categoryPrefix}json_stringify`, {
+        message0: 'convert %1 to JSON text',
+        args0: [
+            {
+                "type": "field_input",
+                "name": "VALUE",
+                "check": null,
+                "text": "",
+                "acceptsBlocks": true
+            }
+        ],
+        output: "String",
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const VALUE = javascriptGenerator.valueToCode(block, 'VALUE');
+        const code = `JSON.stringify(${VALUE})`;
+        return [`${code}`, 0];
+    })
+
+    registerBlock(`${categoryPrefix}json_getproperty`, {
+        message0: 'get %1 from %2',
+        args0: [
+            {
+                "type": "field_input",
+                "name": "KEY",
+                "check": null,
+                "text": "a",
+                "acceptsBlocks": true
+            },
+            {
+                "type": "field_input",
+                "name": "OBJECT",
+                "check": null,
+                "text": "",
+                "acceptsBlocks": true
+            }
+        ],
+        output: null,
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const KEY = javascriptGenerator.valueToCode(block, 'KEY');
+        const OBJECT = javascriptGenerator.valueToCode(block, 'OBJECT');
+        const code = `(${OBJECT})?.[${KEY}]`;
+        return [`${code}`, 0];
+    })
+
+    registerBlock(`${categoryPrefix}json_setproperty`, {
+        message0: 'set %1 to %2 in %3',
+        args0: [
+            {
+                "type": "field_input",
+                "name": "KEY",
+                "check": null,
+                "text": "a",
+                "acceptsBlocks": true
+            },
+            {
+                "type": "field_input",
+                "name": "VALUE",
+                "check": null,
+                "text": "1",
+                "acceptsBlocks": true
+            },
+            {
+                "type": "field_input",
+                "name": "OBJECT",
+                "check": null,
+                "text": "",
+                "acceptsBlocks": true
+            }
+        ],
+        output: null,
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const KEY = javascriptGenerator.valueToCode(block, 'KEY');
+        const VALUE = javascriptGenerator.valueToCode(block, 'VALUE');
+        const OBJECT = javascriptGenerator.valueToCode(block, 'OBJECT');
+        const code = `(() => { const o = Array.isArray(${OBJECT}) ? [...(${OBJECT})] : { ...(${OBJECT}) }; o[${KEY}] = ${VALUE}; return o; })()`;
+        return [`${code}`, 0];
+    })
+
+    registerBlock(`${categoryPrefix}json_isvalid`, {
+        message0: 'is %1 valid JSON?',
+        args0: [
+            {
+                "type": "field_input",
+                "name": "TEXT",
+                "check": "String",
+                "text": '{"a": 1}',
+                "acceptsBlocks": true
+            }
+        ],
+        output: "Boolean",
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const TEXT = javascriptGenerator.valueToCode(block, 'TEXT');
+        const code = `(() => { try { JSON.parse(${TEXT}); return true; } catch (e) { return false; } })()`;
+        return [`${code}`, 0];
+    })
 
     const strings_join_mutator = {
         items_: 0,

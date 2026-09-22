@@ -143,6 +143,11 @@
         <block type="strings_replace" />
         <sep gap="48"></sep>
         <block type="strings_log" />
+        <sep gap="48"></sep>
+        <block type="strings_json_stringify" />
+        <block type="strings_json_getproperty" />
+        <block type="strings_json_setproperty" />
+        <block type="strings_json_isvalid" />
     </category>
     <category name="Vectors" colour="#6cd">
         <block type="vector_create" />
