@@ -1,0 +1,313 @@
+<xml>
+    <!--
+    <category name="Generic" colour="#fff">
+        <block type="generic_number" />
+        <block type="generic_text" />
+        <block type="generic_boolean" />
+    </category>
+    -->
+    <category name="Motion" colour="#4c97ff">
+        <block type="motion_move" />
+        <block type="motion_turnright" />
+        <block type="motion_turnleft" />
+        <sep gap="48"></sep>
+        <block type="motion_goto" />
+        <block type="motion_gototarget" />
+        <block type="motion_glide" />
+        <block type="motion_glidetarget" />
+        <sep gap="48"></sep>
+        <block type="motion_pointdirection" />
+        <block type="motion_pointtowards" />
+        <sep gap="48"></sep>
+        <block type="motion_changex" />
+        <block type="motion_setx" />
+        <block type="motion_changey" />
+        <block type="motion_sety" />
+        <sep gap="48"></sep>
+        <block type="motion_bounce" />
+        <block type="motion_rotationstyle" />
+        <sep gap="48"></sep>
+        <block type="motion_xposition" />
+        <block type="motion_yposition" />
+        <block type="motion_direction" />
+    </category>
+    <category name="Looks" colour="#9966ff">
+        <block type="looks_say" />
+        <block type="looks_sayfor" />
+        <block type="looks_think" />
+        <block type="looks_thinkfor" />
+        <sep gap="48"></sep>
+        <block type="looks_switchcostume" />
+        <block type="looks_nextcostume" />
+        <block type="looks_switchbackdrop" />
+        <block type="looks_nextbackdrop" />
+        <sep gap="48"></sep>
+        <block type="looks_changesize" />
+        <block type="looks_setsize" />
+        <sep gap="48"></sep>
+        <block type="looks_changeeffect" />
+        <block type="looks_seteffect" />
+        <block type="looks_cleareffects" />
+        <sep gap="48"></sep>
+        <block type="looks_show" />
+        <block type="looks_hide" />
+        <sep gap="48"></sep>
+        <block type="looks_gotolayer" />
+        <block type="looks_golayers" />
+        <sep gap="48"></sep>
+        <block type="looks_size" />
+        <block type="looks_costumenumber" />
+        <block type="looks_costumename" />
+        <block type="looks_backdropnumber" />
+        <block type="looks_backdropname" />
+    </category>
+    <category name="Events" colour="#fc6">
+        <block type="events_loaded" />
+        <sep gap="48"></sep>
+        <block type="events_thread" />
+        <sep gap="48"></sep>
+        <block type="events_whenflagclicked" />
+        <block type="events_whenkeypressed" />
+        <block type="events_whenspriteclicked" />
+        <block type="events_whenbackdropswitches" />
+        <block type="events_whengreaterthan" />
+        <block type="events_whenclonestarts" />
+        <sep gap="48"></sep>
+        <block type="events_regbroadcast" />
+        <block type="events_broadcast" />
+        <block type="events_broadcastw" />
+    </category>
+    <category name="Control" colour="#fb6">
+        <block type="control_wait" />
+        <block type="control_waitF" />
+        <block type="control_waitU" />
+        <sep gap="48"></sep>
+        <block type="control_if" />
+        <block type="control_if">
+            <mutation else="1" />
+        </block>
+        <sep gap="48"></sep>
+        <block type="control_repeat" />
+        <block type="control_while" />
+        <sep gap="48"></sep>
+        <block type="control_return" />
+        <block type="control_inline">
+            <statement name="BLOCKS">
+                <block type="control_return" />
+            </statement>
+        </block>
+    </category>
+    <category name="Math" colour="#6d6">
+        <block type="math_number" />
+        <block type="math_boolean" />
+        <sep gap="48"></sep>
+        <block type="math_add" />
+        <block type="math_sub" />
+        <block type="math_mul" />
+        <block type="math_div" />
+        <block type="math_pow" />
+        <block type="math_mod" />
+        <block type="math_log" />
+        <sep gap="48"></sep>
+        <block type="math_random" />
+        <sep gap="48"></sep>
+        <block type="math_const" />
+        <sep gap="48"></sep>
+        <block type="math_true" />
+        <block type="math_false" />
+        <block type="math_randombool" />
+        <sep gap="48"></sep>
+        <block type="math_and" />
+        <block type="math_xor" />
+        <block type="math_or" />
+        <block type="math_not" />
+        <sep gap="48"></sep>
+        <block type="math_equals" />
+        <block type="math_gt" />
+        <block type="math_gte" />
+        <block type="math_lt" />
+        <block type="math_lte" />
+    </category>
+    <category name="Strings" colour="#6db">
+        <block type="strings_string" />
+        <sep gap="48"></sep>
+        <block type="strings_join">
+            <mutation items="2" />
+        </block>
+        <block type="strings_repeat" />
+        <block type="strings_substring" />
+        <block type="strings_split" />
+        <block type="strings_length" />
+        <block type="strings_contains" />
+        <block type="strings_amountof" />
+        <block type="strings_replace" />
+        <sep gap="48"></sep>
+        <block type="strings_log" />
+    </category>
+    <category name="Vectors" colour="#6cd">
+        <block type="vector_create" />
+        <sep gap="48"></sep>
+        <block type="vector_x" />
+        <block type="vector_y" />
+    </category>
+    <category name="Sensors" colour="#69d">
+        <block type="inputs_touching" />
+        <block type="inputs_touchingsprite" />
+        <block type="inputs_touchingcolor" />
+        <sep gap="48"></sep>
+        <block type="inputs_distancemouse" />
+        <block type="inputs_distancesprite" />
+        <sep gap="48"></sep>
+        <block type="inputs_ask" />
+        <block type="inputs_answer" />
+        <sep gap="48"></sep>
+        <block type="inputs_keypress" />
+        <block type="inputs_keyspressed" />
+        <sep gap="48"></sep>
+        <block type="inputs_mousex" />
+        <block type="inputs_mousey" />
+        <block type="inputs_moused" />
+        <block type="inputs_setdrag" />
+        <block type="inputs_draggable" />
+        <sep gap="48"></sep>
+        <block type="inputs_timer" />
+        <block type="inputs_resettimer" />
+        <sep gap="48"></sep>
+        <block type="inputs_current" />
+        <block type="inputs_dayssince2000" />
+        <sep gap="48"></sep>
+        <block type="inputs_username" />
+        <block type="inputs_loudness" />
+    </category>
+    <category name="Variables" colour="#f96" custom="variables">
+        <!-- resources/categories/variables.js -->
+    </category>
+    <category name="Lists" colour="#f76">
+        <block type="lists_create">
+            <mutation items="3" />
+        </block>
+        <block type="lists_create">
+            <mutation items="0" />
+        </block>
+        <sep gap="48"></sep>
+        <block type="lists_get" />
+        <block type="lists_index" />
+        <block type="lists_length" />
+        <block type="lists_contains" />
+        <sep gap="48"></sep>
+        <block type="lists_set" />
+        <block type="lists_join" />
+        <block type="lists_concat" />
+        <sep gap="48"></sep>
+        <block type="lists_foreach">
+            <value name="INDEX">
+                <shadow type="lists_foreachindex" />
+            </value>
+            <value name="VALUE">
+                <shadow type="lists_foreachvalue" />
+            </value>
+        </block>
+    </category>
+    <category name="Lambdas" colour="#d46">
+
+    </category>
+    <category name="Blocks" colour="#b6f" custom="blocks">
+        <!-- resources/categories/blocks.js -->
+    </category>
+
+    <sep />
+
+    <!--
+    <category name="Sprites" colour="#3cc">
+    
+    </category>
+    <category name="Motion" colour="#39c">
+    
+    </category>
+    <category name="Looks" colour="#94c">
+    
+    </category>
+    <category name="Sound" colour="#c4c">
+    
+    </category>
+    <category name="Clones" colour="#c94">
+    
+    </category>
+    -->
+    <category name="Runtime" colour="#aaa">
+        <block type="runtime_onstart" />
+        <block type="runtime_beforetick" />
+        <block type="runtime_aftertick" />
+        <block type="runtime_onstop" />
+        <sep gap="48"></sep>
+        <block type="runtime_start" />
+        <block type="runtime_stop" />
+        <block type="runtime_running" />
+        <block type="runtime_timer" />
+        <sep gap="48"></sep>
+        <block type="runtime_turboset" />
+        <block type="runtime_turboget" />
+        <sep gap="48"></sep>
+        <block type="runtime_frameset" />
+        <block type="runtime_frameget" />
+        <sep gap="48"></sep>
+        <block type="runtime_broadcast" />
+    </category>
+    <category name="Targets" colour="#46d">
+
+    </category>
+    <category name="Browser" colour="#9d5">
+        <block type="script_evalb" />
+        <block type="script_evalv" />
+        <sep gap="48"></sep>
+        <block type="script_fetch" />
+        <block type="script_fetchjson" />
+        <block type="script_fetchadvanced" />
+        <sep gap="48"></sep>
+        <block type="script_jsonparse" />
+        <block type="script_jsonstringify" />
+        <sep gap="48"></sep>
+        <block type="script_consolelog" />
+        <block type="script_consoleerror" />
+        <sep gap="48"></sep>
+        <block type="script_trycatch" />
+        <block type="script_lasterror" />
+        <sep gap="48"></sep>
+        <block type="script_typeof" />
+        <block type="script_globalget" />
+        <block type="script_globalset" />
+    </category>
+    <sep />
+    <category name="Music" colour="#ae29d6">
+        <block type="music_playnote" />
+        <block type="music_playnotenowait" />
+        <block type="music_stopnote" />
+        <block type="music_stopallnotes" />
+        <block type="music_setinstrument" />
+        <block type="music_resttime" />
+        <sep gap="48"></sep>
+        <block type="music_settempo" />
+        <block type="music_changetempo" />
+        <block type="music_gettempo" />
+        <sep gap="48"></sep>
+        <block type="music_setvolume" />
+        <block type="music_getvolume" />
+        <sep gap="48"></sep>
+        <block type="music_playsound" />
+        <block type="music_startsound" />
+        <block type="music_stopallsounds" />
+        <sep gap="48"></sep>
+        <block type="music_midienable" />
+        <block type="music_midioutputs" />
+        <block type="music_midiinputs" />
+        <block type="music_midisetoutput" />
+        <sep gap="48"></sep>
+        <block type="music_midisendnoteon" />
+        <block type="music_midisendnoteoff" />
+        <block type="music_midisendraw" />
+        <sep gap="48"></sep>
+        <block type="music_whenmidimessage" />
+        <block type="music_midimessagenote" />
+        <block type="music_midimessagevelocity" />
+    </category>
+</xml>
