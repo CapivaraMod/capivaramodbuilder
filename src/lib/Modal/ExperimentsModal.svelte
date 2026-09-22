@@ -5,5 +5,5 @@
 </script>
 
 <Modal id={id} title="Experiments" let:data>
-    todo: make this aaa
+    67
 </Modal>
