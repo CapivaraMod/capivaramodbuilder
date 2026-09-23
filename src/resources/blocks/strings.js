@@ -42,7 +42,15 @@ function register() {
             strings.push(INPUT)
         }
 
-        const code = `String.prototype.concat(${strings.join(", ")})`
+        // Using a real array's .join("") gives every item its own proper
+        // ToString conversion and never needs an implicit `this` receiver.
+        // (Previously this called `String.prototype.concat(...)` unbound,
+        // with no string instance to act as `this` — engines have to fall
+        // back to coercing the global object into a primitive for that,
+        // which quietly happens to work in some places and throws
+        // "Cannot convert object to primitive value" in others, like the
+        // sandboxed Function used by the test menu.)
+        const code = `[${strings.join(", ")}].join("")`
         return [`${code}`, 0];
     })
     registerBlock(`${categoryPrefix}join_mutator_join`, {

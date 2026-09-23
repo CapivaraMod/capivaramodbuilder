@@ -69,6 +69,10 @@ const CapivaraModBuilder = {
 }
 `
 
+// Exported so other tools (like the block test menu) can spin up a
+// lightweight sandbox that mirrors the runtime helpers real extensions get.
+export { start };
+
 class Compiler {
     /**
      * Generates JavaScript code from the provided workspace & info.

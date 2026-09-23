@@ -1,0 +1,24 @@
+<xml>
+    <category name="Blocks" colour="#b6f" custom="blocks">
+        <!-- resources/categories/blocks.js -->
+    </category>
+
+
+    <!--
+    <category name="Sprites" colour="#3cc">
+    
+    </category>
+    <category name="Motion" colour="#39c">
+    
+    </category>
+    <category name="Looks" colour="#94c">
+    
+    </category>
+    <category name="Sound" colour="#c4c">
+    
+    </category>
+    <category name="Clones" colour="#c94">
+    
+    </category>
+    -->
+</xml>

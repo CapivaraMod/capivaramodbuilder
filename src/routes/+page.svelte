@@ -43,6 +43,7 @@
   import PropertiesPicker from "$lib/PropertiesPicker/PropertiesPicker.svelte";
   import ExportMenu from "$lib/ExportMenu/ExportMenu.svelte";
   import BlocksMenu from "$lib/BlocksMenu/BlocksMenu.svelte";
+  import TestMenu from "$lib/TestMenu/TestMenu.svelte";
 
   const en = {
     rtl: false,
@@ -282,6 +283,9 @@
     </Tab>
     <Tab title="Export" {activeTab} {tabs} {handleTabClick} {registerTab}>
       <ExportMenu {code} />
+    </Tab>
+    <Tab title="test blocks" {activeTab} {tabs} {handleTabClick} {registerTab}>
+      <TestMenu />
     </Tab>
   </TabManager>
 </div>
