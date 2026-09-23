@@ -47,7 +47,7 @@
 
     .btn {
         display: block;
-        background: linear-gradient(177.5deg, #fa7, #f87);
+        background: linear-gradient(177.5deg, #9EC05B, #6B8E23);
         box-sizing: border-box;
         font-size: 1.5rem;
         border: #0004 solid 0.2rem;

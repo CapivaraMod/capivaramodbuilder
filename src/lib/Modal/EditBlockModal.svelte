@@ -37,17 +37,17 @@
     };
 
     function updateBlocks(data) {
-        previewBlock.blockId_ = data.blockId
-        previewBlock.updateShape_()
+        previewBlock.blockId_ = data.blockId;
+        previewBlock.updateShape_();
         previewBlock.initSvg();
         previewBlock.render();
         requestAnimationFrame(() => {
-            workspace.centerOnBlock(previewBlock.id)
-        })
+            workspace.centerOnBlock(previewBlock.id);
+        });
 
         //refresh workspace
         try {
-            let workspaceG = window.workspace
+            let workspaceG = window.workspace;
             let xml = Blockly.Xml.workspaceToDom(workspaceG);
             workspaceG.clear();
             Blockly.Xml.domToWorkspace(xml, workspaceG);
@@ -56,25 +56,25 @@
     }
 
     function saveBlock(data) {
-        data.toggle()
-        window.blocks[data.blockId] = data.tempBlock
-        updateBlocks(data)
+        data.toggle();
+        window.blocks[data.blockId] = data.tempBlock;
+        updateBlocks(data);
     }
 
-    let previewBlock
+    let previewBlock;
 
     onMount(() => {
         previewBlock = workspace.newBlock("blocks_execute");
 
-        const old = window.modals[id].update
-        window.modals[id].update = function() {
-            old.call(this)
-            updateBlocks(window.modals[id])
-        }
+        const old = window.modals[id].update;
+        window.modals[id].update = function () {
+            old.call(this);
+            updateBlocks(window.modals[id]);
+        };
 
-        addEventListener("resize", ev => {
-            workspace.centerOnBlock(previewBlock.id)
-        })
+        addEventListener("resize", (ev) => {
+            workspace.centerOnBlock(previewBlock.id);
+        });
     });
 </script>
 
@@ -94,11 +94,15 @@
                 {#each Object.keys(data.tempBlock ? data.tempBlock.fields : {}) as i}
                     <tr>
                         <td>
-                            <select value={data.tempBlock.fields[i].type} on:change={(e) => {
-                                data.tempBlock.fields[i].type = e.target.value
-                                data.update()
-                                updateBlocks(data)
-                            }}>
+                            <select
+                                value={data.tempBlock.fields[i].type}
+                                on:change={(e) => {
+                                    data.tempBlock.fields[i].type =
+                                        e.target.value;
+                                    data.update();
+                                    updateBlocks(data);
+                                }}
+                            >
                                 <option value="label">Label</option>
                                 <option value="string">String</option>
                                 <option value="number">Number</option>
@@ -106,33 +110,54 @@
                             </select>
                         </td>
                         <td>
-                            <input type="text" value={data.tempBlock.fields[i].text} on:change={(e) => {
-                                data.tempBlock.fields[i].text = e.target.value
-                                data.update()
-                                updateBlocks(data)
-                            }} />
+                            <input
+                                type="text"
+                                value={data.tempBlock.fields[i].text}
+                                on:change={(e) => {
+                                    data.tempBlock.fields[i].text =
+                                        e.target.value;
+                                    data.update();
+                                    updateBlocks(data);
+                                }}
+                            />
                         </td>
                         <td>
                             {#if data.tempBlock.fields[i].type == "string"}
-                                <input type="text" value={data.tempBlock.fields[i].default ?? ""} placeholder="Default value" on:change={(e) => {
-                                    data.tempBlock.fields[i].default = e.target.value
-                                    data.update()
-                                    updateBlocks(data)
-                                }} />
+                                <input
+                                    type="text"
+                                    value={data.tempBlock.fields[i].default ??
+                                        ""}
+                                    placeholder="Default value"
+                                    on:change={(e) => {
+                                        data.tempBlock.fields[i].default =
+                                            e.target.value;
+                                        data.update();
+                                        updateBlocks(data);
+                                    }}
+                                />
                             {:else if data.tempBlock.fields[i].type == "number"}
-                                <input type="number" value={data.tempBlock.fields[i].default ?? ""} placeholder="Default value" on:change={(e) => {
-                                    data.tempBlock.fields[i].default = e.target.value
-                                    data.update()
-                                    updateBlocks(data)
-                                }} />
+                                <input
+                                    type="number"
+                                    value={data.tempBlock.fields[i].default ??
+                                        ""}
+                                    placeholder="Default value"
+                                    on:change={(e) => {
+                                        data.tempBlock.fields[i].default =
+                                            e.target.value;
+                                        data.update();
+                                        updateBlocks(data);
+                                    }}
+                                />
                             {/if}
                         </td>
                         <td>
-                            <button on:click={() => {
-                                data.tempBlock.fields.splice(i, 1)
-                                data.update()
-                                updateBlocks(data)
-                            }}>Delete</button>
+                            <button
+                                on:click={() => {
+                                    data.tempBlock.fields.splice(i, 1);
+                                    data.update();
+                                    updateBlocks(data);
+                                }}>Delete</button
+                            >
                         </td>
                     </tr>
                 {/each}
@@ -140,20 +165,25 @@
         </div>
         <div class="bottom">
             <!--<button on:click={() => saveBlock(data)}>Save</button>-->
-            <button on:click={() => {
-                data.tempBlock.fields.push({
-                    type: "label",
-                    text: "text",
-                    id: util.randomHex(16)
-                })
-                data.update()
-                updateBlocks(data)
-            }}>Add field</button>
-            <select value={(data.tempBlock ?? {}).type} on:change={(e) => {
-                data.tempBlock.type = e.target.value
-                data.update()
-                updateBlocks(data)
-            }}>
+            <button
+                on:click={() => {
+                    data.tempBlock.fields.push({
+                        type: "label",
+                        text: "text",
+                        id: util.randomHex(16),
+                    });
+                    data.update();
+                    updateBlocks(data);
+                }}>Add field</button
+            >
+            <select
+                value={(data.tempBlock ?? {}).type}
+                on:change={(e) => {
+                    data.tempBlock.type = e.target.value;
+                    data.update();
+                    updateBlocks(data);
+                }}
+            >
                 <option value="command">Command</option>
                 <option value="reporter">Reporter</option>
                 <option value="Boolean">Boolean</option>
@@ -163,6 +193,57 @@
 </Modal>
 
 <style>
+    button {
+        background: none;
+        border: none;
+        outline: none;
+        color: inherit;
+        font-family: inherit;
+        padding: 0.2rem 0.5rem;
+        font-size: inherit;
+        border-radius: 1rem;
+        background-color: #e0e0e0;
+    }
+    :global(.dark) button {
+        color: #fff;
+        background-color: rgb(95, 95, 95);
+    }
+    select {
+        background: none;
+        border: none;
+        outline: none;
+        color: inherit;
+        font-family: inherit;
+        padding: 0.2rem 0.5rem;
+        font-size: inherit;
+        border-radius: 1rem;
+        background-color: #e0e0e0;
+    }
+    :global(.dark) select {
+        color: #fff;
+        background-color: rgb(95, 95, 95);
+    }
+    input {
+        background: none;
+        border: none;
+        outline: none;
+        color: inherit;
+        font-family: inherit;
+        padding: 0.2rem 0.5rem;
+        font-size: inherit;
+        border-radius: 1rem;
+        background-color: #e0e0e0;
+    }
+    input:placeholder-shown {
+        color: #000000a2;
+    }
+    :global(.dark) input:placeholder-shown {
+        color: #ffffffa2;
+    }
+    :global(.dark) input {
+        color: #fff;
+        background-color: rgb(95, 95, 95);
+    }
     .main {
         display: flex;
         flex-direction: column;
@@ -176,7 +257,7 @@
 
     .fields {
         flex: 2;
-        overflow-y: scroll
+        overflow-y: auto;
     }
 
     .fields table {
@@ -199,6 +280,5 @@
     }
 
     .bottom {
-
     }
 </style>
