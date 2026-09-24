@@ -14,6 +14,7 @@ import registerBlocks from "./blocks";
 import registerRuntime from "./runtime";
 import registerScript from "./script";
 import registerMusic from "./music";
+import registerImage from "./image"
 
 export default (language = "en") => {
     registerGeneric(language);
@@ -32,4 +33,5 @@ export default (language = "en") => {
     registerRuntime(language);
     registerScript(language);
     registerMusic(language);
+    registerImage(language)
 }

@@ -315,4 +315,34 @@
         <block type="music_midimessagenote" />
         <block type="music_midimessagevelocity" />
     </category>
+    <category name="Image" colour="#d65">
+        <block type="image_loadurl" />
+        <block type="image_createblank" />
+        <block type="image_copy" />
+        <block type="image_deleteimage" />
+        <block type="image_exists" />
+        <sep gap="48"></sep>
+        <block type="image_width" />
+        <block type="image_height" />
+        <sep gap="48"></sep>
+        <block type="image_resize" />
+        <block type="image_crop" />
+        <block type="image_rotate" />
+        <block type="image_flip" />
+        <sep gap="48"></sep>
+        <block type="image_grayscale" />
+        <block type="image_invert" />
+        <block type="image_brightness" />
+        <block type="image_contrast" />
+        <block type="image_setopacity" />
+        <sep gap="48"></sep>
+        <block type="image_getpixel" />
+        <block type="image_setpixel" />
+        <block type="image_drawimage" />
+        <block type="image_fillrect" />
+        <block type="image_clear" />
+        <sep gap="48"></sep>
+        <block type="image_todataurl" />
+        <block type="image_setascostume" />
+    </category>
 </xml>

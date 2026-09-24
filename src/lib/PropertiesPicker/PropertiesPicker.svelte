@@ -52,7 +52,8 @@
 <div class="root vert">
     <div class="inner horiz">
         <div class="vert equal">
-            <div class="bubble" style:background={properties.color} />
+            <div id="icone-fundo" class="bubble" style:background={properties.color}>
+            </div>
             <span class="name" contenteditable="plaintext-only" bind:innerText={properties.name} on:blur={validateName}></span>
         </div>
         <div class="vert equal">
@@ -149,6 +150,12 @@
 
     .toast {
         animation: fadeInOut 2s ease forwards;
+    }
+
+    #icone-fundo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     @keyframes fadeInOut {
