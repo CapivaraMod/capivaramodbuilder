@@ -50,18 +50,6 @@
         window.modals["editblock"].tempBlock = window.blocks[id];
         window.modals["editblock"].toggle();
     }
-    function deleteBlock(params) {
-        if (!confirm("Are you sure you want to delete this block?")) return;
-
-        let workspace = window.workspace;
-        let block = workspace.getAllBlocks().find((b) => b.blockId_ === params);
-        if (block) {
-            block.dispose();
-        }
-        delete window.blocks[params];
-        updateBlocks();
-    }
-
     setInterval(() => {
         if (!globalThis.window) return;
         blocks = window.blocks;
@@ -79,9 +67,7 @@
             <div id="blocks-btns">
                 <button class="edit" on:click={() => editBlock(id)}>Edit</button
                 >
-                <button class="delete" on:click={() => deleteBlock(id)}
-                    >Delete</button
-                >
+
             </div>
         </div>
     {:else}
