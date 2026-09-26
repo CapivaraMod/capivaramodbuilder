@@ -160,15 +160,16 @@
   }
 
   function loadProject() {
-    fileDialog({ accept: ".capib,.exf" }).then((files) => {
+    fileDialog({ accept: ".capib,.exf" }).then(async (files) => {
       if (!files) return;
       const file = files[0];
 
-      const projectNameIdx = file.name.lastIndexOf(
-        file.name.endsWith(".capib") ? ".capib" : ".exf"
-      );
+      // file.arrayBuffer() returns a Promise, so it must be awaited before
+      // being handed to JSZip - passing the Promise itself made JSZip think
+      // it was being given corrupted/invalid zip data.
+      const buffer = await file.arrayBuffer();
 
-      JSZip.loadAsync(file.arrayBuffer()).then(async (zip) => {
+      JSZip.loadAsync(buffer).then(async (zip) => {
         const dataFolder = zip.folder("data");
         const projectJsonString = await dataFolder
           .file("project.json")
@@ -230,7 +231,6 @@
       saveLocalConfig()
     })
 
-    // mantém a tela de loading visível por um tempo mínimo, mesmo se tudo carregar rápido
     setTimeout(() => {
       loading = false;
     }, 2500);

@@ -250,6 +250,12 @@ function register() {
                     case "boolean":
                         var input = this.appendValueInput(`INPUT${i}`)
                         input.setCheck("Boolean")
+                        var inputInside = this.workspace.newBlock('generic_boolean')
+                        inputInside.setFieldValue("false", "STATE")
+                        inputInside.setShadow(true)
+                        inputInside.initSvg()
+                        inputInside.render()
+                        inputInside.outputConnection.connect(input.connection)
                         break
                 }
 

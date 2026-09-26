@@ -56,7 +56,9 @@ function register() {
         return `${code}\n`;
     })
 
-    Blockly.Extensions.unregister(`${categoryPrefix}get_extension`)
+    if (Blockly.Extensions.isRegistered(`${categoryPrefix}get_extension`)) {
+        Blockly.Extensions.unregister(`${categoryPrefix}get_extension`)
+    }
     Blockly.Extensions.register(`${categoryPrefix}get_extension`, function() {
         this.setOnChange(function() {
             const NAME = this.getField('NAME')
@@ -69,7 +71,9 @@ function register() {
         })
     })
 
-    Blockly.Extensions.unregister(`${categoryPrefix}set_extension`)
+    if (Blockly.Extensions.isRegistered(`${categoryPrefix}set_extension`)) {
+        Blockly.Extensions.unregister(`${categoryPrefix}set_extension`)
+    }
     Blockly.Extensions.register(`${categoryPrefix}set_extension`, function() {
         this.setOnChange(function() {
             const NAME = this.getField('NAME')

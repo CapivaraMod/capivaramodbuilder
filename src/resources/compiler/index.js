@@ -44,17 +44,17 @@ const CapivaraModBuilder = {
         }
 
         add(v) {
-            return new Vector(this.x + v.x, this.y + v.y);
+            return new CapivaraModBuilder.Vector(this.x + v.x, this.y + v.y);
         }
 
         set(x, y) {
-            return new Vector(x ?? this.x, y ?? this.y)
+            return new CapivaraModBuilder.Vector(x ?? this.x, y ?? this.y)
         }
     },
 
     Utils: {
         setList: (list, index, value) => {
-            [...list][index] = value;
+            list[index] = value;
             return list;
         },
         lists_foreach: {

@@ -42,14 +42,6 @@ function register() {
             strings.push(INPUT)
         }
 
-        // Using a real array's .join("") gives every item its own proper
-        // ToString conversion and never needs an implicit `this` receiver.
-        // (Previously this called `String.prototype.concat(...)` unbound,
-        // with no string instance to act as `this` — engines have to fall
-        // back to coercing the global object into a primitive for that,
-        // which quietly happens to work in some places and throws
-        // "Cannot convert object to primitive value" in others, like the
-        // sandboxed Function used by the test menu.)
         const code = `[${strings.join(", ")}].join("")`
         return [`${code}`, 0];
     })
@@ -183,7 +175,9 @@ function register() {
         const code = `(${TEXT}.substring(${FROM}, ${TO}))`;
         return [`${code}`, 0];
     })
-    Blockly.Extensions.unregister(`${categoryPrefix}substring_extension`)
+    if (Blockly.Extensions.isRegistered(`${categoryPrefix}substring_extension`)) {
+        Blockly.Extensions.unregister(`${categoryPrefix}substring_extension`)
+    }
     Blockly.Extensions.register(`${categoryPrefix}substring_extension`, function() {
         this.setOnChange(function() {
             const FROM = this.getFieldInput('FROM').getTargetField()

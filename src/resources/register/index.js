@@ -35,6 +35,13 @@ export function registerBlock(blockName, jsonData, compileFunction) {
 }
 
 export function registerMutator(mutatorName, ...args) {
-    Blockly.Extensions.unregister(mutatorName)
+    // Only unregister if this name was already registered (e.g. during
+    // HMR). On a fresh load nothing is registered yet, and calling
+    // unregister() unconditionally logged a "No extension mapping for
+    // name ... found to unregister" console warning for every single
+    // mutator in the app on every page load.
+    if (Blockly.Extensions.isRegistered(mutatorName)) {
+        Blockly.Extensions.unregister(mutatorName)
+    }
     Blockly.Extensions.registerMutator(mutatorName, ...args);
 }

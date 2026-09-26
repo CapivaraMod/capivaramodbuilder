@@ -50,6 +50,29 @@
         window.modals["editblock"].tempBlock = window.blocks[id];
         window.modals["editblock"].toggle();
     }
+
+    function deleteBlock(id) {
+        if (!confirm("Are you sure you want to delete this block?")) return;
+
+        let workspace = window.workspace;
+        const defineBlock = workspace
+            .getTopBlocks(false)
+            .find((b) => b.type === "blocks_define" && b.blockId_ === id);
+        if (defineBlock && !defineBlock.isDeadOrDying()) {
+            defineBlock.dispose(false);
+        }
+        const executeBlocks = workspace
+            .getAllBlocks(false)
+            .filter((b) => b.type === "blocks_execute" && b.blockId_ === id);
+        for (const block of executeBlocks) {
+            if (!block.isDeadOrDying()) block.dispose(true);
+        }
+
+        delete window.blocks[id];
+
+        updateBlocks();
+    }
+
     setInterval(() => {
         if (!globalThis.window) return;
         blocks = window.blocks;
@@ -65,9 +88,8 @@
         <div class="block">
             <span class="name">{util.blockToName(block.fields)}</span>
             <div id="blocks-btns">
-                <button class="edit" on:click={() => editBlock(id)}>Edit</button
-                >
-
+                <button class="edit" on:click={() => editBlock(id)}>Edit</button>
+                <button class="delete" on:click={() => deleteBlock(id)}>Delete</button>
             </div>
         </div>
     {:else}
@@ -115,5 +137,9 @@
         flex-direction: row;
         display: flex;
         gap: 0.5em;
+    }
+
+    .block button.delete {
+        background: #f55;
     }
 </style>

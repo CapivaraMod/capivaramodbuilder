@@ -29,9 +29,6 @@
                 rtl,
             });
             try {
-                // em updates (mudança de config/locale) o workspace é
-                // recriado e esta função pode tentar registrar categorias
-                // que já existem no registry global do Blockly
                 registerDynamicCategories(workspace);
             } catch (ex) {
                 console.warn(ex);
