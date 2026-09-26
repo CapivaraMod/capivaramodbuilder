@@ -115,7 +115,7 @@ function register() {
         const SECS = javascriptGenerator.valueToCode(block, 'SECS');
         const X = javascriptGenerator.valueToCode(block, 'X');
         const Y = javascriptGenerator.valueToCode(block, 'Y');
-        const code = `await new Promise(done => { const t = ${TARGET}; const sx = t.x; const sy = t.y; const ex = ${X}; const ey = ${Y}; const dur = ${SECS} * 1000; const start = performance.now(); const step = () => { const f = dur > 0 ? Math.min((performance.now() - start) / dur, 1) : 1; t.setXY(sx + (ex - sx) * f, sy + (ey - sy) * f); if (f < 1) { requestAnimationFrame(step); } else { done(); } }; step(); });`;
+        const code = `await (async () => { const __secs = ${SECS}; const __x = ${X}; const __y = ${Y}; await new Promise(done => { const t = ${TARGET}; const sx = t.x; const sy = t.y; const ex = __x; const ey = __y; const dur = __secs * 1000; const start = performance.now(); const step = () => { const f = dur > 0 ? Math.min((performance.now() - start) / dur, 1) : 1; t.setXY(sx + (ex - sx) * f, sy + (ey - sy) * f); if (f < 1) { requestAnimationFrame(step); } else { done(); } }; step(); }); })();`;
         return `${code}\n`;
     })
 
@@ -135,7 +135,7 @@ function register() {
     }, (block) => {
         const SECS = javascriptGenerator.valueToCode(block, 'SECS');
         const TARGET_CHOICE = block.getFieldValue('TARGET');
-        const code = `await new Promise(done => { const t = ${TARGET}; const p = ${pointFor(TARGET_CHOICE)}; const sx = t.x; const sy = t.y; const dur = ${SECS} * 1000; const start = performance.now(); const step = () => { const f = dur > 0 ? Math.min((performance.now() - start) / dur, 1) : 1; t.setXY(sx + (p[0] - sx) * f, sy + (p[1] - sy) * f); if (f < 1) { requestAnimationFrame(step); } else { done(); } }; step(); });`;
+        const code = `await (async () => { const __secs = ${SECS}; await new Promise(done => { const t = ${TARGET}; const p = ${pointFor(TARGET_CHOICE)}; const sx = t.x; const sy = t.y; const dur = __secs * 1000; const start = performance.now(); const step = () => { const f = dur > 0 ? Math.min((performance.now() - start) / dur, 1) : 1; t.setXY(sx + (p[0] - sx) * f, sy + (p[1] - sy) * f); if (f < 1) { requestAnimationFrame(step); } else { done(); } }; step(); }); })();`;
         return `${code}\n`;
     })
 

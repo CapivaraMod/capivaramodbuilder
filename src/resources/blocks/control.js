@@ -91,7 +91,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const TIME = javascriptGenerator.valueToCode(block, 'TIME');
-        const code = `await new Promise(resolve => setTimeout(() => resolve(), ${TIME} * 1000));`;
+        const code = `await (async () => { const __time = ${TIME}; await new Promise(resolve => setTimeout(() => resolve(), __time * 1000)); })();`;
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}waitF`, {

@@ -38,7 +38,32 @@ function register() {
     }, (block) => {
         const NAME = javascriptGenerator.valueToCode(block, 'NAME');
         const URL = javascriptGenerator.valueToCode(block, 'URL');
-        const code = `await new Promise((resolve, reject) => { const store = ${STORE}; const img = new Image(); img.crossOrigin = "anonymous"; img.onload = () => { const canvas = document.createElement("canvas"); canvas.width = img.naturalWidth; canvas.height = img.naturalHeight; const ctx = canvas.getContext("2d"); ctx.drawImage(img, 0, 0); store[${NAME}] = canvas; resolve(); }; img.onerror = reject; img.src = ${URL}; });`;
+        const code = `await (async () => {
+            const __name = ${NAME};
+            const __url = ${URL};
+            const store = ${STORE};
+            const __loadImg = (src) => new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = src;
+            });
+            let img;
+            try {
+                img = await __loadImg(__url);
+            } catch (e) {
+                const __noProto = String(__url).replace(/^https?:\\/\\//, "");
+                const __proxied = "https://images.weserv.nl/?url=" + (String(__url).startsWith("https") ? "ssl:" : "") + __noProto;
+                img = await __loadImg(__proxied);
+            }
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+            store[__name] = canvas;
+        })();`;
         return `${code}\n`;
     })
 
@@ -330,9 +355,7 @@ function register() {
             {
                 "type": "field_colour",
                 "name": "COLOR",
-                "colour": "#ff0000",
-                "check": "Colour",
-                "acceptsBlocks": true
+                "colour": "#ff0000"
             }
         ],
         previousStatement: null,
@@ -345,8 +368,8 @@ function register() {
         const Y = javascriptGenerator.valueToCode(block, 'Y');
         const WIDTH = javascriptGenerator.valueToCode(block, 'WIDTH');
         const HEIGHT = javascriptGenerator.valueToCode(block, 'HEIGHT');
-        const COLOR = javascriptGenerator.valueToCode(block, 'COLOR');
-        const code = `(() => { const canvas = ${STORE}[${NAME}]; if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = ${COLOR}; ctx.fillRect(${X}, ${Y}, ${WIDTH}, ${HEIGHT}); })();`;
+        const COLOR = block.getFieldValue('COLOR');
+        const code = `(() => { const canvas = ${STORE}[${NAME}]; if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = ${JSON.stringify(COLOR)}; ctx.fillRect(${X}, ${Y}, ${WIDTH}, ${HEIGHT}); })();`;
         return `${code}\n`;
     })
 

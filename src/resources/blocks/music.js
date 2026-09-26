@@ -39,7 +39,7 @@ function register() {
     }, (block) => {
         const NOTE = javascriptGenerator.valueToCode(block, 'NOTE');
         const BEATS = javascriptGenerator.valueToCode(block, 'BEATS');
-        const code = `await (() => { const s = ${SYNTH}; const dur = ${BEATS} * (60 / s.tempo); const osc = s.ctx.createOscillator(); const gain = s.ctx.createGain(); osc.type = s.waveform; osc.frequency.value = s.noteToFreq(${NOTE}); gain.gain.value = s.volume; osc.connect(gain); gain.connect(s.ctx.destination); osc.start(); gain.gain.setTargetAtTime(0, s.ctx.currentTime + dur * 0.9, 0.05); osc.stop(s.ctx.currentTime + dur); return new Promise(done => setTimeout(done, dur * 1000)); })();`;
+        const code = `await (async () => { const __note = ${NOTE}; const __beats = ${BEATS}; const s = ${SYNTH}; const dur = __beats * (60 / s.tempo); const osc = s.ctx.createOscillator(); const gain = s.ctx.createGain(); osc.type = s.waveform; osc.frequency.value = s.noteToFreq(__note); gain.gain.value = s.volume; osc.connect(gain); gain.connect(s.ctx.destination); osc.start(); gain.gain.setTargetAtTime(0, s.ctx.currentTime + dur * 0.9, 0.05); osc.stop(s.ctx.currentTime + dur); await new Promise(done => setTimeout(done, dur * 1000)); })();`;
         return `${code}\n`;
     })
 
@@ -114,7 +114,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const BEATS = javascriptGenerator.valueToCode(block, 'BEATS');
-        const code = `await new Promise(done => setTimeout(done, ${BEATS} * (60 / ${SYNTH}.tempo) * 1000));`;
+        const code = `await (async () => { const __beats = ${BEATS}; await new Promise(done => setTimeout(done, __beats * (60 / ${SYNTH}.tempo) * 1000)); })();`;
         return `${code}\n`;
     })
 
