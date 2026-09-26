@@ -54,15 +54,19 @@ export default (arg, color, name, block) => {
     case 'field_angle':
     case 'field_input':
     case 'field_number':
-    case 'field_dropdown': {
+    case 'field_dropdown':
+    case 'field_colour': {
         color = '#fff'
+        // field_colour has no "check" of its own by default, so default it to
+        // the "Colour" type so it can only accept/produce colour values
+        const check = arg.check || (arg.type === 'field_colour' ? 'Colour' : arg.check)
         const newBlockName = `${name}_${arg.name}`
         Blockly.Blocks[newBlockName] = {
             init: function () {
                 this.jsonInit({
                     message0: '%1',
                     args0: [arg],
-                    output: arg.check,
+                    output: check,
                     inputsInline: true,
                     colour: color
                 });
@@ -89,7 +93,7 @@ export default (arg, color, name, block) => {
         return {
             type: 'input_value',
             name: arg.name,
-            check: arg.check
+            check: check
         }
     }
     // we dont have anything to do with this so we do nothing to it

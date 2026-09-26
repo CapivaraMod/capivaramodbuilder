@@ -172,15 +172,17 @@ function register() {
             {
                 "type": "field_colour",
                 "name": "COLOR",
-                "colour": "#ff0000"
+                "colour": "#ff0000",
+                "check": "Colour",
+                "acceptsBlocks": true
             }
         ],
         output: "Boolean",
         inputsInline: true,
         colour: categoryColor
     }, (block) => {
-        const COLOR = block.getFieldValue('COLOR');
-        const code = `${TARGET}.isTouchingColor(Scratch.Cast.toRgbColorList(${JSON.stringify(COLOR)}))`;
+        const COLOR = javascriptGenerator.valueToCode(block, 'COLOR');
+        const code = `${TARGET}.isTouchingColor(Scratch.Cast.toRgbColorList(${COLOR}))`;
         return [`${code}`, 0];
     })
 

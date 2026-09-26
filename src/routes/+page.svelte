@@ -121,7 +121,15 @@
   };
 
   function updateGeneratedCode() {
-    code = compiler.compile(workspace, properties);
+    try {
+      code = compiler.compile(workspace, properties);
+    } catch (e) {
+      // Don't let a bad block state silently freeze the code preview on an
+      // old, stale version - surface the failure in the console and in the
+      // generated code panel itself so it's obvious something is wrong.
+      console.error("Failed to compile extension:", e);
+      code = `/* Failed to generate code: ${e && e.message ? e.message : e} */`;
+    }
   }
 
   function openModal(id) {

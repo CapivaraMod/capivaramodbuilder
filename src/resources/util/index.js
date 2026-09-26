@@ -18,6 +18,12 @@ export default {
                 case "boolean": {
                     return `<${field.text}>`
                 }
+                case "color": {
+                    return `[${field.text}]`
+                }
+                default: {
+                    return `[${field.text}]`
+                }
             }
         }).join(" ")
     },
@@ -30,7 +36,11 @@ export default {
                 }
                 case "string":
                 case "number":
-                case "boolean": {
+                case "boolean":
+                case "color": {
+                    return `[${field.id}]`
+                }
+                default: {
                     return `[${field.id}]`
                 }
             }

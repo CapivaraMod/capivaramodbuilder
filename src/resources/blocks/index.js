@@ -10,6 +10,7 @@ import registerInputs from "./inputs";
 import registerVariables from "./variables";
 import registerLists from "./lists";
 import registerBlocks from "./blocks";
+import registerColors from "./colors";
 
 import registerRuntime from "./runtime";
 import registerScript from "./script";
@@ -29,6 +30,7 @@ export default (language = "en") => {
     registerVariables(language);
     registerLists(language);
     registerBlocks(language);
+    registerColors(language);
 
     registerRuntime(language);
     registerScript(language);

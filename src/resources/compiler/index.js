@@ -150,6 +150,23 @@ class Compiler {
                                 type: "Boolean"
                             }]
                         }
+                        case 'color': {
+                            return [v.id, {
+                                type: "color",
+                                defaultValue: v.default || "#ff0000"
+                            }]
+                        }
+                        default: {
+                            // fall back to a plain string argument instead of
+                            // silently producing `undefined`, which used to
+                            // crash Object.fromEntries and freeze the whole
+                            // code preview for every block whenever an
+                            // unhandled field type (e.g. color) was used.
+                            return [v.id, {
+                                type: "string",
+                                defaultValue: v.default ?? ""
+                            }]
+                        }
                     }
                 }))
             }

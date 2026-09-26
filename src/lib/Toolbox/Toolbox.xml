@@ -184,6 +184,21 @@
         <block type="inputs_username" />
         <block type="inputs_loudness" />
     </category>
+    <category name="Colors" colour="#ff8c69">
+        <block type="colors_fromrgb" />
+        <block type="colors_fromhsv" />
+        <block type="colors_fromhex" />
+        <block type="colors_random" />
+        <sep gap="48"></sep>
+        <block type="colors_tohex" />
+        <block type="colors_torgblist" />
+        <block type="colors_component" />
+        <sep gap="48"></sep>
+        <block type="colors_mix" />
+        <block type="colors_lighten" />
+        <block type="colors_darken" />
+        <block type="colors_invert" />
+    </category>
     <category name="Variables" colour="#f96" custom="variables">
         <!-- resources/categories/variables.js -->
     </category>

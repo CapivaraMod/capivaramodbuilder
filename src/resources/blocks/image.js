@@ -330,7 +330,9 @@ function register() {
             {
                 "type": "field_colour",
                 "name": "COLOR",
-                "colour": "#ff0000"
+                "colour": "#ff0000",
+                "check": "Colour",
+                "acceptsBlocks": true
             }
         ],
         previousStatement: null,
@@ -343,8 +345,8 @@ function register() {
         const Y = javascriptGenerator.valueToCode(block, 'Y');
         const WIDTH = javascriptGenerator.valueToCode(block, 'WIDTH');
         const HEIGHT = javascriptGenerator.valueToCode(block, 'HEIGHT');
-        const COLOR = block.getFieldValue('COLOR');
-        const code = `(() => { const canvas = ${STORE}[${NAME}]; if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = ${JSON.stringify(COLOR)}; ctx.fillRect(${X}, ${Y}, ${WIDTH}, ${HEIGHT}); })();`;
+        const COLOR = javascriptGenerator.valueToCode(block, 'COLOR');
+        const code = `(() => { const canvas = ${STORE}[${NAME}]; if (!canvas) return; const ctx = canvas.getContext("2d"); ctx.fillStyle = ${COLOR}; ctx.fillRect(${X}, ${Y}, ${WIDTH}, ${HEIGHT}); })();`;
         return `${code}\n`;
     })
 

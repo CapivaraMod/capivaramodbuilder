@@ -60,6 +60,24 @@ function register() {
         return [code, 0];
     })
     
+    registerBlock(`${categoryPrefix}colour`, {
+        message0: '%1',
+        args0: [
+            {
+                "type": "field_colour",
+                "name": "COLOR",
+                "colour": "#ff0000"
+            }
+        ],
+        output: "Colour",
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const COLOR = block.getFieldValue('COLOR');
+        const code = `${JSON.stringify(COLOR)}`;
+        return [code, 0];
+    })
+    
     registerBlock(`${categoryPrefix}boolean`, {
         message0: '%1',
         args0: [

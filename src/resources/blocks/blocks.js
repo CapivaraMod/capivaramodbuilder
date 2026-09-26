@@ -66,6 +66,7 @@ function register() {
                     case "string":
                     case "number":
                     case "boolean":
+                    case "color":
                         var input = this.appendValueInput(`INPUT${i}`)
                         let reporter = this.workspace.newBlock(`${categoryPrefix}input`)
                         reporter.blockId_ = this.blockId_
@@ -146,6 +147,9 @@ function register() {
                         break
                     case "boolean":
                         this.setOutput(true, "Boolean")
+                        break
+                    case "color":
+                        this.setOutput(true, "Colour")
                         break
                     default:
                         this.setOutput(true, null)
@@ -252,6 +256,16 @@ function register() {
                         input.setCheck("Boolean")
                         var inputInside = this.workspace.newBlock('generic_boolean')
                         inputInside.setFieldValue("false", "STATE")
+                        inputInside.setShadow(true)
+                        inputInside.initSvg()
+                        inputInside.render()
+                        inputInside.outputConnection.connect(input.connection)
+                        break
+                    case "color":
+                        var input = this.appendValueInput(`INPUT${i}`)
+                        input.setCheck("Colour")
+                        var inputInside = this.workspace.newBlock('generic_colour')
+                        inputInside.setFieldValue(field.default || "#ff0000", "COLOR")
                         inputInside.setShadow(true)
                         inputInside.initSvg()
                         inputInside.render()

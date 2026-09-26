@@ -107,6 +107,7 @@
                                 <option value="string">String</option>
                                 <option value="number">Number</option>
                                 <option value="boolean">Boolean</option>
+                                <option value="color">Color</option>
                             </select>
                         </td>
                         <td>
@@ -141,6 +142,17 @@
                                     value={data.tempBlock.fields[i].default ??
                                         ""}
                                     placeholder="Default value"
+                                    on:change={(e) => {
+                                        data.tempBlock.fields[i].default =
+                                            e.target.value;
+                                        data.update();
+                                        updateBlocks(data);
+                                    }}
+                                />
+                            {:else if data.tempBlock.fields[i].type == "color"}
+                                <input
+                                    type="color"
+                                    value={data.tempBlock.fields[i].default ?? "#ff0000"}
                                     on:change={(e) => {
                                         data.tempBlock.fields[i].default =
                                             e.target.value;
