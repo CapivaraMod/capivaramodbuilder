@@ -110,19 +110,9 @@ class Compiler {
             `})(Scratch);`
         ];
 
-        /** turbobuilder stuff need to port over
-        if (imageStates) {
-            if (imageStates.icon.image) {
-                // add icon uri
-                const url = imageStates.icon.image;
-                classRegistry.extensionInfo.blockIconURI = url;
-            }
-            if (imageStates.menuicon.image) {
-                // add icon uri
-                const url = imageStates.menuicon.image;
-                classRegistry.extensionInfo.menuIconURI = url;
-            }
-        }**/
+        if (properties.icon) {
+            classRegistry.extensionInfo.menuIconURI = properties.icon;
+        }
         classRegistry.extensionInfo.id = properties.id;
         classRegistry.extensionInfo.name = properties.name;
         classRegistry.extensionInfo.color1 = properties.color;

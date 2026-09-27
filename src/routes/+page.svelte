@@ -118,6 +118,7 @@
     name: "Extension",
     id: "extensionID",
     color: "#0fbd8c",
+    icon: null,
   };
 
   function updateGeneratedCode() {
@@ -187,6 +188,7 @@
         properties.name = projectJson.properties.name ?? "Extension";
         properties.id = projectJson.properties.id ?? "extensionID";
         properties.color = projectJson.properties.color ?? "#0fbd8c";
+        properties.icon = projectJson.properties.icon ?? null;
 
         window.variables = projectJson.variables ?? {};
         window.blocks = projectJson.blocks ?? {};
