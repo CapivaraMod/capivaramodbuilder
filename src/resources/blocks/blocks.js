@@ -181,7 +181,7 @@ function register() {
             }
         }
 
-        return `await extension["block_${block.blockId_}"]({${object.join(", ")}})`
+        return `await extension["block_${block.blockId_}"]({${object.join(", ")}});`
     })
     /** @type {Blockly.Block} */
     const executeMutator = {
