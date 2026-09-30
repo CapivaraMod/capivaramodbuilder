@@ -257,6 +257,7 @@ export function translateToolbox(xml, currentLanguage = "en") {
             Script: "Script", Music: "Música",
             Generic: "Genérico", Lambdas: "Lambdas", Sprites: "Sprites",
             Sound: "Som", Clones: "Clones", Targets: "Alvos", Browser: "Navegador",
+            Screenshot: "Captura de Tela",
         },
         es: {
             Motion: "Movimiento", Looks: "Apariencia", Events: "Eventos",
@@ -266,6 +267,7 @@ export function translateToolbox(xml, currentLanguage = "en") {
             Script: "Script", Music: "Música",
             Generic: "Genérico", Lambdas: "Lambdas", Sprites: "Sprites",
             Sound: "Sonido", Clones: "Clones", Targets: "Objetivos", Browser: "Navegador",
+            Screenshot: "Captura de Pantalla",
         },
     }[currentLanguage] || {};
 

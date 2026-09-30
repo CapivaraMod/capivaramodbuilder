@@ -1,5 +1,6 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
+import { TARGET, UTIL } from './target';
 
 const categoryPrefix = 'music_';
 const categoryColor = '#ae29d6';
@@ -188,7 +189,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const NAME = javascriptGenerator.valueToCode(block, 'NAME');
-        const code = `await Scratch.vm.runtime.ext_scratch3_sound.playSoundAndWaitForFinish({ SOUND_MENU: ${NAME} }, { target: (Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage)) });`;
+        const code = `await Scratch.vm.runtime.ext_scratch3_sound.playSoundAndWait({ SOUND_MENU: ${NAME} }, { target: ${TARGET} });`;
         return `${code}\n`;
     })
 
@@ -201,7 +202,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const NAME = javascriptGenerator.valueToCode(block, 'NAME');
-        const code = `Scratch.vm.runtime.ext_scratch3_sound.playSound({ SOUND_MENU: ${NAME} }, { target: (Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage)) });`;
+        const code = `Scratch.vm.runtime.ext_scratch3_sound.playSound({ SOUND_MENU: ${NAME} }, { target: ${TARGET} });`;
         return `${code}\n`;
     })
 

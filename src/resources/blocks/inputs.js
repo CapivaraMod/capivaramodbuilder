@@ -1,11 +1,11 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
 import Blockly from 'blockly/core';
+import { TARGET, UTIL } from './target';
 
 const categoryPrefix = 'inputs_';
 const categoryColor = '#69d';
 
-const TARGET = `(Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage))`;
 
 let keys = [
     "any",

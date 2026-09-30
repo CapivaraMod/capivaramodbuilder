@@ -107,7 +107,7 @@ javascriptGenerator.valueToCode = function(block, name, order = 0) {
                         ? value === 'true' 
                         : Boolean(value))(${code})`
             case 'List':
-                return `((value) => value && value.length ? value : [value])(${code})`
+                return `((value) => Array.isArray(value) ? value : [value])(${code})`
             case 'Vector':
                 return `CapivaraModBuilder.Vector.from(${code})`
         }

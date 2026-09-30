@@ -28,7 +28,7 @@ function register() {
     }, (block) => {
         const NAME = block.getFieldValue("NAME")
         const code = `CapivaraModBuilder.Variables.get("${NAME}")`;
-        return `${code}\n`;
+        return [code, 0];
     })
 
     registerBlock(`${categoryPrefix}set`, {
@@ -52,7 +52,7 @@ function register() {
     }, (block) => {
         const NAME = block.getFieldValue("NAME")
         const INPUT = javascriptGenerator.valueToCode(block, "INPUT") || "null"
-        const code = `CapivaraModBuilder.Variables.set("${NAME}", ${INPUT})`;
+        const code = `CapivaraModBuilder.Variables.set("${NAME}", ${INPUT});`;
         return `${code}\n`;
     })
 

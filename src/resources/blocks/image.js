@@ -1,11 +1,11 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
+import { TARGET, UTIL } from './target';
 
 const categoryPrefix = 'image_';
 const categoryColor = '#d65';
 
 const STORE = `(window.__capivaraImages || (window.__capivaraImages = {}))`;
-const TARGET = `(Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage))`;
 
 function textField(name, text) {
     return {

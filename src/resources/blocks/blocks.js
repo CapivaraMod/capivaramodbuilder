@@ -2,6 +2,7 @@ import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock, registerMutator } from '../register';
 import Blockly from 'blockly/core';
 import util from '../util';
+import { UTIL } from './target';
 
 const categoryPrefix = 'blocks_';
 const categoryColor = '#b6f';
@@ -171,17 +172,21 @@ function register() {
         mutator: `${categoryPrefix}execute_mutator`
     }, (block) => {
         let b = window.blocks[block.blockId_]
-        if (!b) return "()"
+        if (!b) return block.outputConnection ? ["undefined", 0] : ""
 
         let object = []
         for (let i = 0; block.getInput(`INPUT${i}`); i++) {
             let field = b.fields[i]
-            if (field.type !== "label") {
+            if (field && field.type !== "label") {
                 object.push(`"${field.id}": ${javascriptGenerator.valueToCode(block, `INPUT${i}`)}`)
             }
         }
 
-        return `await extension["block_${block.blockId_}"]({${object.join(", ")}});`
+        // repassa `util` para o bloco chamado continuar rodando no MESMO ator
+        const call = `extension["block_${block.blockId_}"]({${object.join(", ")}}, ${UTIL})`
+        // reporter/boolean precisam devolver [codigo, ordem] (antes devolvia "await ...;" como statement e quebrava a expressao)
+        if (block.outputConnection) return [`(await ${call})`, 0]
+        return `await ${call};\n`
     })
     /** @type {Blockly.Block} */
     const executeMutator = {
@@ -299,7 +304,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         let X = javascriptGenerator.valueToCode(block, 'X')
-        return `return (${X})`
+        return `return (${X});\n`
     })
 }
 

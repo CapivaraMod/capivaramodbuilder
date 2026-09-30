@@ -10,9 +10,11 @@
         icon: null
     }
 
+    // svg is the only vector type; the rest are the raster formats every
+    // browser can decode natively without extra libraries
     const ACCEPTED_TYPES = ["image/svg+xml", "image/png", "image/jpeg", "image/gif", "image/webp"];
     const ACCEPTED_EXT = ".svg,.png,.jpg,.jpeg,.gif,.webp";
-    const MAX_ICON_BYTES = 1024 * 1024;
+    const MAX_ICON_BYTES = 1024 * 1024; // 1mb, plenty for a menu icon
 
     let showIdWarning = false;
     let warningTimeout;
@@ -116,29 +118,38 @@
         properties.icon = null;
         update();
     }
+
+    function handleBubbleKeydown(e) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            importIcon();
+        }
+    }
 </script>
 
 <div class="root vert">
     <div class="inner horiz">
         <div class="vert equal">
-            <button
-                type="button"
+            <div
                 id="icone-fundo"
                 class="bubble"
                 class:no-fill={properties.icon}
                 style:background={properties.icon ? "transparent" : properties.color}
+                role="button"
+                tabindex="0"
                 on:click={importIcon}
+                on:keydown={handleBubbleKeydown}
                 title="Importar ícone (SVG, PNG, JPG, GIF ou WEBP)"
             >
                 {#if properties.icon}
                     <span class="icon-preview-wrap">
                         <img class="icon-preview" src={properties.icon} alt="" />
                     </span>
-                    <span class="icon-remove" on:click={removeIcon} title="Remove icon">✕</span>
+                    <button type="button" class="icon-remove" on:click={removeIcon} title="Remover ícone">✕</button>
                 {:else}
                     <span class="icon-hint">+</span>
                 {/if}
-            </button>
+            </div>
             {#if iconError}
                 <div class="toast">{iconError}</div>
             {/if}
@@ -202,7 +213,7 @@
         border-color: transparent;
     }
 
-    button.bubble {
+    .bubble {
         position: relative;
         padding: 0;
         cursor: pointer;
@@ -212,7 +223,7 @@
     .icon-preview-wrap {
         position: absolute;
         inset: 0;
-        border-radius: 0;
+        border-radius: 100%;
         overflow: hidden;
         display: block;
     }
@@ -237,6 +248,7 @@
         right: -0.4em;
         width: 1.8em;
         height: 1.8em;
+        padding: 0;
         line-height: 1.8em;
         text-align: center;
         border-radius: 100%;
@@ -245,6 +257,8 @@
         color: #fff;
         font-size: 1em;
         font-weight: bold;
+        font-family: inherit;
+        box-sizing: border-box;
         cursor: pointer;
         z-index: 1;
     }

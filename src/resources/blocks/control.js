@@ -103,7 +103,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const v = "temp_"+util.randomHex(24)
-        const code = `await new Promise(${v} => { requestAnimationFrame(() => { ${v}() }) })`;
+        const code = `await new Promise(${v} => { requestAnimationFrame(() => { ${v}() }) });`;
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}waitU`, {
@@ -120,10 +120,11 @@ function register() {
         inputsInline: true,
         colour: categoryColor
     }, (block) => {
-        const BOOL = javascriptGenerator.valueToCode(block, 'BOOL');
+        const BOOL = javascriptGenerator.valueToCode(block, 'BOOL') || "false";
         const v1 = "temp_"+util.randomHex(24)
         const v2 = "temp_"+util.randomHex(24)
-        const code = `await new Promise(${v1} => {let ${v2} = () => false ? ${v1}() : requestAnimationFrame(${v2}); ${v2}()})`;
+        // antes a condicao era ignorada (`false ? ...`) e o bloco nunca terminava
+        const code = `await new Promise(${v1} => { const ${v2} = () => (${BOOL}) ? ${v1}() : requestAnimationFrame(${v2}); ${v2}(); });`;
         return `${code}\n`;
     })
 
@@ -150,7 +151,8 @@ function register() {
     }, (block) => {
         const BOOL = javascriptGenerator.valueToCode(block, 'BOOL') || "false";
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `while (${BOOL}) { ${BLOCKS} };`
+        // cede 1 frame por volta: sem isso "while true" sem espera travava a aba inteira
+        const code = `while (${BOOL}) { ${BLOCKS} await new Promise(r => requestAnimationFrame(r)); };`
         return `${code}\n`;
     })
 
@@ -220,7 +222,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `(async () => { ${BLOCKS} return null; })();`
+        const code = `(await (async () => { ${BLOCKS} return null; })())`
         return [`${code}`, 0];
     })
 

@@ -1,10 +1,10 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
+import { TARGET, UTIL } from './target';
 
 const categoryPrefix = 'events_';
 const categoryColor = '#fc6';
 
-const TARGET = `(Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage))`;
 
 function register() {
     registerBlock(`${categoryPrefix}loaded`, {
@@ -72,7 +72,8 @@ function register() {
     }, (block) => {
         const NAME = javascriptGenerator.valueToCode(block, 'NAME');
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `CapivaraModBuilder.Broadcasts.register(${NAME}, (async () => { ${BLOCKS} })());`;
+        // antes a funcao era EXECUTADA na hora do registro (o `()` no fim) em vez de guardada
+        const code = `CapivaraModBuilder.Broadcasts.register(${NAME}, async (util) => { ${BLOCKS} });`;
         return `${code}\n`;
     })
 
@@ -93,7 +94,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const NAME = javascriptGenerator.valueToCode(block, 'NAME');
-        const code = `CapivaraModBuilder.Broadcasts.execute(${NAME});`;
+        const code = `CapivaraModBuilder.Broadcasts.execute(${NAME}, ${UTIL});`;
         return `${code}\n`;
     })
 
@@ -114,7 +115,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const NAME = javascriptGenerator.valueToCode(block, 'NAME');
-        const code = `await CapivaraModBuilder.Broadcasts.execute(${NAME});`;
+        const code = `await CapivaraModBuilder.Broadcasts.execute(${NAME}, ${UTIL});`;
         return `${code}\n`;
     })
 
@@ -135,7 +136,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `Scratch.vm.on('PROJECT_RUN_START', (async () => { ${BLOCKS} }));`;
+        const code = `Scratch.vm.on('PROJECT_START', (async () => { ${BLOCKS} }));`;
         return `${code}\n`;
     })
 
@@ -183,7 +184,9 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `(() => { const t = ${TARGET}; Scratch.vm.runtime.on('targetWasClicked', (async (clicked) => { if (clicked !== t) return; ${BLOCKS} })); })();`;
+        // 'targetWasClicked' nao existe no VM; o clique chega via startHats('event_whenthisspriteclicked', null, target).
+        // `util.target` passa a ser o ator que foi clicado.
+        const code = `CapivaraModBuilder.Hats.on('event_whenthisspriteclicked', async (clicked) => { if (!clicked || clicked.isStage) return; const util = { target: clicked }; ${BLOCKS} });`;
         return `${code}\n`;
     })
 
@@ -211,7 +214,8 @@ function register() {
     }, (block) => {
         const BACKDROP = javascriptGenerator.valueToCode(block, 'BACKDROP');
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `Scratch.vm.runtime.on('EVENT_STAGE_SWITCH_BACKDROP', (async (backdrop) => { if (!backdrop || backdrop.name !== ${BACKDROP}) return; ${BLOCKS} }));`;
+        // 'EVENT_STAGE_SWITCH_BACKDROP' nao existe no VM; a troca chega via startHats('event_whenbackdropswitchesto', {BACKDROP})
+        const code = `CapivaraModBuilder.Hats.on('event_whenbackdropswitchesto', async (stage, fields) => { if (!fields || String(fields.BACKDROP).toLowerCase() !== String(${BACKDROP}).toLowerCase()) return; const util = { target: Scratch.vm.runtime.getTargetForStage() }; ${BLOCKS} });`;
         return `${code}\n`;
     })
 
@@ -268,7 +272,8 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const BLOCKS = javascriptGenerator.statementToCode(block, 'BLOCKS');
-        const code = `(() => { const t = ${TARGET}; Scratch.vm.runtime.on('targetWasCreated', (async (newTarget, original) => { if (original !== t) return; ${BLOCKS} })); })();`;
+        // targetWasCreated(novo, original): clone tem `original` definido. util.target = o clone que nasceu.
+        const code = `Scratch.vm.runtime.on('targetWasCreated', async (newTarget, original) => { if (!original) return; const util = { target: newTarget }; ${BLOCKS} });`;
         return `${code}\n`;
     })
 }

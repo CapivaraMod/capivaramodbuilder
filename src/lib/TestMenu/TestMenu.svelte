@@ -198,7 +198,7 @@
                     "Scratch",
                     "extension",
                     "args",
-                    `return (async () => { ${body} })();`,
+                    `${runtimeHelpers}\nreturn (async () => { ${body} })();`,
                 );
             } catch {
                 continue;

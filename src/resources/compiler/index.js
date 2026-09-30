@@ -9,13 +9,39 @@ if (!Scratch.extensions.unsandboxed) {
 
 const CapivaraModBuilder = {
     Broadcasts: new function() {
+        // varios "when X broadcasted" com o mesmo nome rodam todos (antes o ultimo sobrescrevia)
         this.raw_ = {};
         this.register = (name, blocks) => {
-            this.raw_[name] = blocks;
+            (this.raw_[name] = this.raw_[name] || []).push(blocks);
         };
-        this.execute = async (name) => {
-            if (this.raw_[name]) {
-                await this.raw_[name]();
+        // util (com util.target) e repassado para que o broadcast rode no ator de quem enviou
+        this.execute = async (name, util) => {
+            const handlers = this.raw_[name];
+            if (!handlers) return;
+            await Promise.all(handlers.map(fn => fn(util)));
+        };
+    },
+
+    // O VM nao emite eventos de "sprite clicked" / "backdrop switched"; o unico ponto onde eles
+    // existem e runtime.startHats. Interceptamos UMA vez e despachamos para os hats registrados.
+    Hats: new function() {
+        this.listeners_ = {};
+        this.patched_ = false;
+        this.on = (opcode, callback) => {
+            (this.listeners_[opcode] = this.listeners_[opcode] || []).push(callback);
+            if (this.patched_) return;
+            this.patched_ = true;
+            const runtime = Scratch.vm.runtime;
+            const original = runtime.startHats;
+            const self = this;
+            runtime.startHats = function (hatOpcode, fields, target) {
+                const list = self.listeners_[hatOpcode];
+                if (list) {
+                    for (const fn of list.slice()) {
+                        Promise.resolve().then(() => fn(target, fields)).catch(e => console.error(e));
+                    }
+                }
+                return original.apply(this, arguments);
             };
         };
     },
@@ -66,7 +92,7 @@ const CapivaraModBuilder = {
             return y.length == 0 ? 0 : x.split(y).length - 1
         }
     }
-}
+};
 `
 
 // Exported so other tools (like the block test menu) can spin up a
@@ -167,11 +193,10 @@ class Compiler {
             `   return ${JSON.stringify(classRegistry.extensionInfo).substring(0, JSON.stringify(classRegistry.extensionInfo).length - 1)}}`,
             `}`,
         ], Object.entries(window.blocks ?? {}).map(([id, block]) => {
-            let blockCode = javascriptGenerator.statementToCode(
-                workspace.getTopBlocks().find(v => v.type == "blocks_define" && v.blockId_ == id),
-                "BLOCKS"
-            )
-            return `async block_${id}(args) { ${blockCode} }`
+            const defineBlock = workspace.getTopBlocks().find(v => v.type == "blocks_define" && v.blockId_ == id)
+            const blockCode = defineBlock ? javascriptGenerator.statementToCode(defineBlock, "BLOCKS") : ""
+            // `util` = 2o argumento que o TurboWarp entrega (util.target = ator que executa o bloco)
+            return `async block_${id}(args, util) { ${blockCode} }`
         }), classRegistry.bottom, code, footerCode).join('\n');
     }
 }

@@ -257,16 +257,21 @@ function register() {
         const varlistname = "temp_"+util.randomHex(24)
         const varindexname = "temp_"+util.randomHex(24)
         const vardepthname = "temp_"+util.randomHex(24)
-        const code = 
+        // `for...in` devolvia o indice como STRING ("0"+1 = "01") e passava por propriedades herdadas;
+        // agora o indice e numerico e o depth e restaurado mesmo com return/erro dentro do loop.
+        const code =
        `var ${varlistname} = ${LIST};
         CapivaraModBuilder.Utils.lists_foreach.depth += 1;
         var ${vardepthname} = CapivaraModBuilder.Utils.lists_foreach.depth;
-        for (var ${varindexname} in ${varlistname}) {
-            CapivaraModBuilder.Utils.lists_foreach.index[${vardepthname}] = ${varindexname};
-            CapivaraModBuilder.Utils.lists_foreach.value[${vardepthname}] = ${varlistname}[${varindexname}];
-            ${BLOCKS}
-        };
-        CapivaraModBuilder.Utils.lists_foreach.depth -= 1;
+        try {
+            for (var ${varindexname} = 0; ${varindexname} < ${varlistname}.length; ${varindexname}++) {
+                CapivaraModBuilder.Utils.lists_foreach.index[${vardepthname}] = ${varindexname};
+                CapivaraModBuilder.Utils.lists_foreach.value[${vardepthname}] = ${varlistname}[${varindexname}];
+                ${BLOCKS}
+            }
+        } finally {
+            CapivaraModBuilder.Utils.lists_foreach.depth -= 1;
+        }
         `
         return `${code}\n`;
     })

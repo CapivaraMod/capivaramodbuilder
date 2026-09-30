@@ -284,6 +284,9 @@
         <block type="script_fetchjson" />
         <block type="script_fetchadvanced" />
         <sep gap="48"></sep>
+        <block type="script_downloaddataurl" />
+        <block type="script_downloadurl" />
+        <sep gap="48"></sep>
         <block type="script_jsonparse" />
         <block type="script_jsonstringify" />
         <sep gap="48"></sep>

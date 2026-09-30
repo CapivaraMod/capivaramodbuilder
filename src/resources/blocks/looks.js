@@ -1,10 +1,10 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
+import { TARGET, UTIL } from './target';
 
 const categoryPrefix = 'looks_';
 const categoryColor = '#9966ff';
 
-const TARGET = `(Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage))`;
 const STAGE = `Scratch.vm.runtime.getTargetForStage()`;
 const LOOKS = `Scratch.vm.runtime.ext_scratch3_looks`;
 

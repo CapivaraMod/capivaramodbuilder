@@ -33,7 +33,7 @@ function register() {
         colour: categoryColor
     }, (block) => {
         const INPUT = javascriptGenerator.valueToCode(block, 'INPUT');
-        const code = `eval(${INPUT})`;
+        const code = `eval(${INPUT});`;
         return `${code}\n`;
     })
     registerBlock(`${categoryPrefix}evalv`, {
@@ -243,6 +243,34 @@ function register() {
         const INPUT = javascriptGenerator.valueToCode(block, 'INPUT');
         const code = `typeof (${INPUT})`;
         return [code, 0];
+    })
+
+    registerBlock(`${categoryPrefix}downloaddataurl`, {
+        message0: 'download file %1 from data url %2',
+        args0: [textField('FILENAME', 'file.png'), textField('DATA', 'data:,')],
+        previousStatement: null,
+        nextStatement: null,
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const FILENAME = javascriptGenerator.valueToCode(block, 'FILENAME');
+        const DATA = javascriptGenerator.valueToCode(block, 'DATA');
+        const code = `(() => { const a = document.createElement("a"); a.href = ${DATA}; a.download = ${FILENAME}; document.body.appendChild(a); a.click(); a.remove(); })();`;
+        return `${code}\n`;
+    })
+
+    registerBlock(`${categoryPrefix}downloadurl`, {
+        message0: 'download file %1 from url %2',
+        args0: [textField('FILENAME', 'file.png'), textField('LINK', 'https://example.com/file.png')],
+        previousStatement: null,
+        nextStatement: null,
+        inputsInline: true,
+        colour: categoryColor
+    }, (block) => {
+        const FILENAME = javascriptGenerator.valueToCode(block, 'FILENAME');
+        const LINK = javascriptGenerator.valueToCode(block, 'LINK');
+        const code = `await (async () => { const res = await fetch(${LINK}); const blob = await res.blob(); const objUrl = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = objUrl; a.download = ${FILENAME}; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(objUrl); })();`;
+        return `${code}\n`;
     })
 
     registerBlock(`${categoryPrefix}globalget`, {

@@ -1,10 +1,10 @@
 import javascriptGenerator from '../javascriptGenerator';
 import { registerBlock } from '../register';
+import { TARGET, UTIL } from './target';
 
 const categoryPrefix = 'motion_';
 const categoryColor = '#4c97ff';
 
-const TARGET = `(Scratch.vm.runtime.getEditingTarget() || Scratch.vm.runtime.targets.find(t => !t.isStage))`;
 
 const MOUSE_POINT = `[Scratch.vm.runtime.ioDevices.mouse.getScratchX(), Scratch.vm.runtime.ioDevices.mouse.getScratchY()]`;
 

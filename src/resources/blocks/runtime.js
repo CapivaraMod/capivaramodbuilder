@@ -209,7 +209,7 @@ function register() {
     }, (block) => {
         let NAME = javascriptGenerator.valueToCode(block, 'NAME');
 
-        return `Scratch.vm.runtime.startHats("event_whenbroadcastreceived", {BROADCAST_OPTION: ${NAME}})`;
+        return `Scratch.vm.runtime.startHats("event_whenbroadcastreceived", {BROADCAST_OPTION: ${NAME}});\n`;
     })
 }
 
