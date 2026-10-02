@@ -51,7 +51,7 @@
             let xml = Blockly.Xml.workspaceToDom(workspaceG);
             workspaceG.clear();
             Blockly.Xml.domToWorkspace(xml, workspaceG);
-            this.refreshToolboxSelection();
+            workspaceG.refreshToolboxSelection();
         } catch {}
     }
 
@@ -59,6 +59,46 @@
         data.toggle();
         window.blocks[data.blockId] = data.tempBlock;
         updateBlocks(data);
+    }
+
+    let dragIndex = null;
+    let overIndex = null;
+
+    function moveField(data, from, to) {
+        const fields = data.tempBlock.fields;
+        if (to < 0 || to >= fields.length || from === to) return;
+
+        const [field] = fields.splice(from, 1);
+        fields.splice(to, 0, field);
+
+        data.tempBlock = data.tempBlock;
+        data.update();
+        updateBlocks(data);
+    }
+
+    function onDragStart(e, index) {
+        dragIndex = index;
+        e.dataTransfer.effectAllowed = "move";
+        // usa a linha inteira como imagem do arrasto
+        const row = e.currentTarget.closest("tr");
+        if (row) e.dataTransfer.setDragImage(row, 0, 0);
+    }
+
+    function onDragOver(e, index) {
+        if (dragIndex === null) return;
+        e.preventDefault();
+        overIndex = index;
+    }
+
+    function onDrop(e, data, index) {
+        e.preventDefault();
+        if (dragIndex !== null) moveField(data, dragIndex, index);
+        onDragEnd();
+    }
+
+    function onDragEnd() {
+        dragIndex = null;
+        overIndex = null;
     }
 
     let previewBlock;
@@ -91,8 +131,13 @@
                     <th><!-- options --></th>
                     <th><!-- buttons --></th>
                 </tr>
-                {#each Object.keys(data.tempBlock ? data.tempBlock.fields : {}) as i}
-                    <tr>
+                {#each data.tempBlock ? data.tempBlock.fields : [] as field, i (field.id ?? i)}
+                    <tr
+                        class:dragging={dragIndex === i}
+                        class:over={overIndex === i && dragIndex !== i}
+                        on:dragover={(e) => onDragOver(e, i)}
+                        on:drop={(e) => onDrop(e, data, i)}
+                    >
                         <td>
                             <select
                                 value={data.tempBlock.fields[i].type}
@@ -162,10 +207,32 @@
                                 />
                             {/if}
                         </td>
-                        <td>
+                        <td class="row-btns">
+                            <span
+                                class="handle"
+                                draggable="true"
+                                role="button"
+                                tabindex="-1"
+                                aria-label="Arrastar para reordenar"
+                                on:dragstart={(e) => onDragStart(e, i)}
+                                on:dragend={onDragEnd}>⋮⋮</span
+                            >
+                            <button
+                                disabled={i === 0}
+                                aria-label="Mover para cima"
+                                on:click={() => moveField(data, i, i - 1)}
+                                >↑</button
+                            >
+                            <button
+                                disabled={i === data.tempBlock.fields.length - 1}
+                                aria-label="Mover para baixo"
+                                on:click={() => moveField(data, i, i + 1)}
+                                >↓</button
+                            >
                             <button
                                 on:click={() => {
                                     data.tempBlock.fields.splice(i, 1);
+                                    data.tempBlock = data.tempBlock;
                                     data.update();
                                     updateBlocks(data);
                                 }}>Delete</button
@@ -184,6 +251,7 @@
                         text: "text",
                         id: util.randomHex(16),
                     });
+                    data.tempBlock = data.tempBlock;
                     data.update();
                     updateBlocks(data);
                 }}>Add field</button
@@ -219,6 +287,9 @@
     :global(.dark) button {
         color: #fff;
         background-color: rgb(95, 95, 95);
+    }
+    button:disabled {
+        opacity: 0.4;
     }
     select {
         background: none;
@@ -289,6 +360,36 @@
     :is(input, select):only-child {
         width: 100%;
         box-sizing: border-box;
+    }
+
+    .row-btns {
+        display: flex;
+        align-items: center;
+        gap: 0.3em;
+        white-space: nowrap;
+    }
+
+    .row-btns button {
+        min-width: 2em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+    }
+    .handle {
+        cursor: grab;
+        opacity: 0.6;
+        padding: 0 0.3em;
+        user-select: none;
+    }
+
+    tr.dragging {
+        opacity: 0.4;
+    }
+
+    tr.over {
+        outline: 2px solid #4bf;
+        outline-offset: -2px;
     }
 
     .bottom {

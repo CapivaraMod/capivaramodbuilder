@@ -9,12 +9,10 @@ if (!Scratch.extensions.unsandboxed) {
 
 const CapivaraModBuilder = {
     Broadcasts: new function() {
-        // varios "when X broadcasted" com o mesmo nome rodam todos (antes o ultimo sobrescrevia)
         this.raw_ = {};
         this.register = (name, blocks) => {
             (this.raw_[name] = this.raw_[name] || []).push(blocks);
         };
-        // util (com util.target) e repassado para que o broadcast rode no ator de quem enviou
         this.execute = async (name, util) => {
             const handlers = this.raw_[name];
             if (!handlers) return;
@@ -22,8 +20,6 @@ const CapivaraModBuilder = {
         };
     },
 
-    // O VM nao emite eventos de "sprite clicked" / "backdrop switched"; o unico ponto onde eles
-    // existem e runtime.startHats. Interceptamos UMA vez e despachamos para os hats registrados.
     Hats: new function() {
         this.listeners_ = {};
         this.patched_ = false;
@@ -128,7 +124,7 @@ class Compiler {
                 `}`,
                 ``,
                 `let extension = new Extension();`,
-                `// code compiled from extforge`
+                `// code compiled from CapivaraModBuilder`
             ]
         }
         const footerCode = [
